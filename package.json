@@ -1,0 +1,14 @@
+{
+  "name": "workspace-root",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "start": "pnpm --filter portfolio-app run start",
+    "test": "pnpm -r run test:ci",
+    "lint": "pnpm -r run lint"
+  }
+}

@@ -1,0 +1,39 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # Use Node.js 14.x
+
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - name: Install Dependencies
+      run: pnpm install  # Replace with npm install if you're not using pnpm
+
+    - name: Run Linter
+      run: pnpm run lint
+
+    - name: Run Tests
+      run: pnpm run test
+
+    - name: Build Project
+      run: pnpm --filter portfolio-app run build  # Replace with npm run build if you're not using pnpm
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./packages/portfolio-app/dist  # The directory containing your built project
+
