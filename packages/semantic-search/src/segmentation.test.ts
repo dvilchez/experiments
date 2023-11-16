@@ -4,7 +4,14 @@ describe("segment", () => {
   it("should return a list of segments with a length inferior to provided value", async () => {
     const segments = segmentByWords(await randomListOfWords(), 100);
     expect(segments.length).toBe(2);
-    expect(segments[0].split(" ").length).toBe(100);
+    expect(segments[0].split(" ").length).toBeGreaterThan(100);
+    expect(segments[1].split(" ").length).toBeLessThan(100);
+  });
+
+  it("should generate overlapping segments", async () => {
+    const segments = segmentByWords(await randomListOfWords(), 100);
+    expect(segments.length).toBe(2);
+    expect(segments[1].split(" ").length).toBeGreaterThan(50);
     expect(segments[1].split(" ").length).toBeLessThan(100);
   });
 });
