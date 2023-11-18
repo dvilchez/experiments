@@ -1,1 +1,0 @@
-(()=>{"use strict";class e extends HTMLElement{connectedCallback(){this.innerHTML="<div>Hello World!</div>"}}customElements.define("project-component",e);const t=document.createElement("project-component"),n=document.getElementById("projects-container");n?.appendChild(t)})();
