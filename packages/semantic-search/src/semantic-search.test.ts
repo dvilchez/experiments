@@ -1,14 +1,14 @@
+import { expect } from "@esm-bundle/chai";
 import { segmentByWords } from "./segmentation";
+import { embed } from "./embeddings";
 
-describe("semantic search", () => {
-  it("should return a list of documents related with the query text", async () => {
-    const chunks = segmentByWords(text, 100);
-    //const chunksEmbeddings = await embed(chunks);
-    //const querTextEmbeddings = await embed(content)
-    //searchSimilarity(querTextEmbeddings, chunksEmbeddings)
-    //[{title: "title", content: "content", score: 0.9}}]
-    expect(true).toBe(true);
-  });
+it("should return a list of documents related with the query text", async () => {
+  const chunks = segmentByWords(text, 100);
+  //const chunksEmbeddings = await embed(chunks);
+  //const querTextEmbeddings = await embed(content)
+  //searchSimilarity(querTextEmbeddings, chunksEmbeddings)
+  //[{title: "title", content: "content", score: 0.9}}]
+  expect(true).to.be.true;
 });
 
 const text = `Near a great forest there lived a poor woodcutter and his wife, and his two children; the boy's name was Hansel and the girl's Grethel. They had very little to bite or to sup, and once, when there was great dearth in the land, the man could not even gain the daily bread. As he lay in bed one night thinking of this, and turning and tossing, he sighed heavily, and said to his wife, "What will become of us? we cannot even feed our children; there is nothing left for ourselves."
