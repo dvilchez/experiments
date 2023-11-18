@@ -1,6 +1,7 @@
-import "semantic-search";
+// import "semantic-search";
 
-const myComponentInstance = document.createElement("semantic-search");
-const projectsContainer = document.getElementById("projects-container");
+// const myComponentInstance = document.createElement("semantic-search");
+// const projectsContainer = document.getElementById("projects-container");
 
-projectsContainer?.appendChild(myComponentInstance);
+// projectsContainer?.appendChild(myComponentInstance);
+export {};
