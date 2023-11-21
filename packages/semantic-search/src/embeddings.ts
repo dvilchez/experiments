@@ -2,7 +2,9 @@ import { pipeline } from "@xenova/transformers";
 
 const modelName = "TaylorAI/gte-tiny";
 
-export async function embed(chunk: string): Promise<string> {
+export async function embed(
+  chunk: string
+): Promise<{ text: string; vector: Float32Array }> {
   const extractor = await pipeline("feature-extraction", modelName, {
     quantized: true
   });
@@ -11,5 +13,11 @@ export async function embed(chunk: string): Promise<string> {
     normalize: true
   });
 
-  return embedding.data;
+  return { text: chunk, vector: embedding.data };
+}
+
+export async function embedCollection(
+  chunk: string[]
+): Promise<{ text: string; vector: Float32Array }[]> {
+  return Promise.all(chunk.map((chunk) => embed(chunk)));
 }
