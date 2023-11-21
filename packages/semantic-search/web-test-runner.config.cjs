@@ -8,6 +8,12 @@ const contains = (str, substr) => {
 const fs = createFsFromVolume(new Volume());
 
 module.exports = {
+  testFramework: {
+    config: {
+      ui: "bdd",
+      timeout: "4000"
+    }
+  },
   plugins: [
     {
       name: "mime",
