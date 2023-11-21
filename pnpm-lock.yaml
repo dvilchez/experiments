@@ -62,6 +62,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^6.9.1
         version: 6.9.1(eslint@8.52.0)(typescript@5.2.2)
+      '@web/dev-server':
+        specifier: ^0.4.1
+        version: 0.4.1
       '@web/test-runner':
         specifier: ^0.18.0
         version: 0.18.0(typescript@5.2.2)
