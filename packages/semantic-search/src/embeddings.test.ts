@@ -3,7 +3,7 @@ import { embed } from "./embeddings";
 
 it("should return a list of embeddings", (done) => {
   embed(chunk).then((embeddings) => {
-    expect(embeddings).to.have.lengthOf(384);
+    expect(embeddings.vector).to.have.lengthOf(384);
     done();
   });
 });
