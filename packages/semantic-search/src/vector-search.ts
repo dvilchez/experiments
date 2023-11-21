@@ -1,16 +1,7 @@
-export function calculateSimilarities(
-  queryEmbeddings: { text: string; vector: Float32Array },
-  chunksEmbeddings: { text: string; vector: Float32Array }[]
-): { text: string; score: number }[] {
-  return chunksEmbeddings.map((chunkEmbeddings) => {
-    return {
-      text: chunkEmbeddings.text,
-      score: cosinSimilarity(queryEmbeddings.vector, chunkEmbeddings.vector)
-    };
-  });
-}
-
-const cosinSimilarity = (vecA: Float32Array, vecB: Float32Array): number => {
+export const cosinSimilarity = (
+  vecA: Float32Array,
+  vecB: Float32Array
+): number => {
   if (vecA.length !== vecB.length) {
     throw new Error("Vectors must be of the same length");
   }

@@ -1,22 +1,24 @@
 import { expect } from "@esm-bundle/chai";
 import { segmentByWords } from "./segmentation";
-import { embed, embedCollection } from "./embeddings";
-import { calculateSimilarities } from "./vector-search";
+import { embedCollection, Embedding } from "./embeddings";
+import { semanticSearch } from "./semantic-search";
 
-it("should return a list of documents related with the query text", async () => {
-  const query = "food";
-  const chunks = segmentByWords(text, 100);
-  const queryTextEmbeddings = await embed(query);
-  const chunksEmbeddings = await embedCollection(chunks);
+describe("semanticSearch", () => {
+  let embeddings: Embedding[];
+  beforeEach(async () => {
+    const chunks = segmentByWords(text, 100);
+    embeddings = await embedCollection(chunks);
+  });
 
-  const similarities = calculateSimilarities(
-    queryTextEmbeddings,
-    chunksEmbeddings
-  );
+  it("should return a list of documents related with the query text", async () => {
+    const query = "food";
 
-  const coincidence = similarities.sort((a, b) => b.score - a.score)[0];
-  expect(coincidence.score).to.eql(0.7744789415832468);
-  expect(coincidence.text).to.eql(highScoreChunk);
+    const similarities = await semanticSearch(query, embeddings);
+
+    const coincidence = similarities.sort((a, b) => b.score - a.score)[0];
+    expect(coincidence.score).to.eql(0.7744789415832468);
+    expect(coincidence.text).to.eql(highScoreChunk);
+  });
 });
 
 const highScoreChunk = `children, saying, "Get up, you lazy bones; we are going into the forest to cut wood." Then she gave each of them a piece of bread, and said, "That is for dinner, and you must not eat it before then, for you will get no more." Grethel carried the bread under her apron, for Hansel had his pockets full of the flints. Then they set off all together on their way to the forest. When they had gone a little way Hansel stood still and looked back towards the house, and this he did again and again, till his father said to him, "Hansel, what are you looking at? take`;
