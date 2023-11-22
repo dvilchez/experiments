@@ -17,7 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@esm-bundle/chai": "4.3.4-fix.0",
-    "@types/jest": "^29.5.7",
+    "@types/mocha": "^10.0.6",
     "@typescript-eslint/parser": "^6.9.1",
     "@web/dev-server": "^0.4.1",
     "@web/test-runner": "^0.18.0",
