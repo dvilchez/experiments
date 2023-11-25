@@ -8,14 +8,14 @@ export class FileDropComponent extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.innerHTML = `
             <style>
-                .drop-area {
+                .drop-component {
                     border: 2px dashed #ccc;
                     padding: 20px;
                     text-align: center;
                     background-color: #eee;
                 }
             </style>
-            <div class="drop-area">
+            <div class="drop-component">
                 Drag and drop files/folders here
             </div>
         `;
@@ -24,7 +24,7 @@ export class FileDropComponent extends HTMLElement {
   }
 
   initializeDropArea() {
-    const dropArea = this.shadowRoot.querySelector(".drop-area");
+    const dropArea = this.shadowRoot.querySelector(".drop-component");
 
     dropArea.addEventListener("dragover", (event) => {
       event.stopPropagation();

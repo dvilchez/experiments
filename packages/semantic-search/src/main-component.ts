@@ -1,6 +1,11 @@
 import { FileDropComponent } from "./file-drop-component";
+import { ListOfFiles } from "./file-list-component";
+import { SearchResultList } from "./results-component";
+import { SearchBox } from "./search-box-component";
 
 export class Main extends HTMLElement {
+  _onFilesDropped: (files: File[]) => Promise<void>;
+  _onSearch: (query: string) => Promise<{ text: string; score: number }[]>;
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -20,54 +25,9 @@ export class Main extends HTMLElement {
           height: 100vh;
       }
 
-      .search-area {
-          text-align: center;
-          padding: 20px;
-          background-color: #f8f8f8;
-          border-bottom: 1px solid #ddd;
-      }
-
-      #searchInput {
-          width: 50%;
-          padding: 10px 20px;
-          margin: 0 10px;
-          font-size: 16px;
-          border: 1px solid #ddd;
-          border-radius: 20px;
-          box-shadow: none;
-          outline: none;
-      }
-
-      #searchInput:focus {
-          border-color: #bbb;
-          box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
-      }
-
-      #searchButton {
-          padding: 10px 20px;
-          font-size: 16px;
-          background-color: #f8f8f8;
-          border: 1px solid #dcdcdc;
-          border-radius: 4px;
-          cursor: pointer;
-          outline: none;
-      }
-
-      #searchButton:hover {
-          border-color: #c6c6c6;
-          background-color: #f0f0f0;
-      }
-
       .content-area {
           display: flex;
           height: calc(100% - 60px);
-      }
-
-      .doc-list {
-          background-color: #fff;
-          overflow-y: auto;
-          height: 100%;
-          flex: 2;
       }
 
       .drop-area {
@@ -76,34 +36,74 @@ export class Main extends HTMLElement {
           padding: 20px;
           border: 2px dashed #ccc;
           flex: 1;
+          display: flex;
+          flex-direction: column;
+      }
+
+      .drop-box {
+          flex: 1;
+      }
+
+      .file-list {
+          flex: 2;
+          align-self: flex-start;
       }
     </style>
     <div class="container">
         <!-- Search Component -->
-        <div class="search-area">
-            <input type="text" id="searchInput" placeholder="Search...">
-            <button id="searchButton">Search</button>
-        </div>
+        <search-box>
+        </search-box>
 
         <!-- Document Lists and Drop Area -->
         <div class="content-area">
-                <div class="doc-list">
-                  Doc list
-                </div>
-
-                <file-drop class="drop-area">
+              <search-result-list>
+              </search-result-list>
+              <div class="drop-area">
+                <file-drop class="drop-box">
                     Drag and drop files/folders here
                 </file-drop>
+                <file-list class="file-list">
+
+                </file-list>
+              </div>
         </div>
     </div>`;
 
     setTimeout(() => {
       const fileDropComponent: FileDropComponent =
         this.shadowRoot.querySelector("file-drop");
-      fileDropComponent.onFilesDropped = (files) => {
-        // Handle the files here
-        console.log("Files dropped:", files);
+      const fileList: ListOfFiles = this.shadowRoot.querySelector("file-list");
+      const resultsList: SearchResultList =
+        this.shadowRoot.querySelector("search-result-list");
+      const searchBox: SearchBox = this.shadowRoot.querySelector("search-box");
+
+      fileDropComponent.onFilesDropped = async (files: FileList) => {
+        const list = Array(files.length)
+          .fill(null)
+          .map((_, i) => files[i]);
+        await this._onFilesDropped(list);
+        fileList.files = list.map((file: File) => file.name);
+      };
+
+      searchBox.onSearch = async (query: string) => {
+        const results = await this._onSearch(query);
+        resultsList.results = results;
       };
     }, 0);
   }
+
+  set onFilesDropped(callback: (files: File[]) => Promise<void>) {
+    this._onFilesDropped = callback;
+  }
+
+  set onSearch(
+    callback: (query: string) => Promise<{ text: string; score: number }[]>
+  ) {
+    this._onSearch = callback;
+  }
 }
+
+window.customElements.define("file-drop", FileDropComponent);
+window.customElements.define("file-list", ListOfFiles);
+window.customElements.define("search-result-list", SearchResultList);
+window.customElements.define("search-box", SearchBox);
