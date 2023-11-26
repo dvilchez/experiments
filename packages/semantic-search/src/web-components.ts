@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const chunks = await acc;
         const text = await file.text();
 
-        return [...chunks, ...segmentByWords(text, 10)];
+        return [...chunks, ...segmentByWords(text, 100)];
       },
       Promise.resolve([])
     );
