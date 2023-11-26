@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "web-dev-server --open --app-index src/index.html --watch",
-    "test": "web-test-runner src/*.test.ts --watch",
-    "test:ci": "web-test-runner src/*.test.ts",
+    "test": "web-test-runner src/**/*.test.ts --watch",
+    "test:ci": "web-test-runner src/**/*.test.ts",
     "types-check": "tsc --noEmit --watch",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "eslint . --ext .js,.ts --fix"
