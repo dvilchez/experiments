@@ -2,7 +2,7 @@
   "name": "semantic-search",
   "version": "1.0.0",
   "description": "",
-  "main": "src/web-components.ts",
+  "main": "src/index.ts",
   "type": "module",
   "scripts": {
     "start": "web-dev-server --open --app-index src/index.html --watch",
