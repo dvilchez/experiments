@@ -1,4 +1,4 @@
-import { FileDropComponent } from "./file-drop-component";
+import { DroppedItems, FileDropComponent } from "./file-drop-component";
 import { ListOfFiles } from "./file-list-component";
 import { SearchResultList } from "./results-component";
 import { SearchBox } from "./search-box-component";
@@ -77,12 +77,10 @@ export class Main extends HTMLElement {
         this.shadowRoot.querySelector("search-result-list");
       const searchBox: SearchBox = this.shadowRoot.querySelector("search-box");
 
-      fileDropComponent.onFilesDropped = async (files: FileList) => {
-        const list = Array(files.length)
-          .fill(null)
-          .map((_, i) => files[i]);
-        await this._onFilesDropped(list);
-        fileList.files = list.map((file: File) => file.name);
+      fileDropComponent.onFilesDropped = async (files: DroppedItems) => {
+        console.log("Files dropped", files, flatFiles(files));
+        await this._onFilesDropped(flatFiles(files));
+        fileList.files = flatFiles(files).map((file) => file.name);
       };
 
       searchBox.onSearch = async (query: string) => {
@@ -101,6 +99,20 @@ export class Main extends HTMLElement {
   ) {
     this._onSearch = callback;
   }
+}
+
+function flatFiles(items: DroppedItems): File[] {
+  const result: File[] = [];
+  if (!items) return result;
+
+  for (const item of items) {
+    if (item.isDirectory) {
+      result.push(...flatFiles(item.children));
+    } else {
+      result.push(item.file);
+    }
+  }
+  return result;
 }
 
 window.customElements.define("file-drop", FileDropComponent);
