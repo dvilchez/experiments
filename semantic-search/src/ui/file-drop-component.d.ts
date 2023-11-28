@@ -3,6 +3,13 @@ export declare class FileDropComponent extends HTMLElement {
     constructor();
     connectedCallback(): void;
     initializeDropArea(): void;
-    set onFilesDropped(handler: (files: FileList) => void);
-    handleFiles(files: FileList): void;
+    set onFilesDropped(handler: (items: DroppedItems) => void);
 }
+export type DroppedItem = {
+    name: string;
+    path: string;
+    file?: File;
+    isDirectory: boolean;
+    children?: DroppedItems;
+};
+export type DroppedItems = DroppedItem[];
