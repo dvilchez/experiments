@@ -11,7 +11,7 @@ const data: { embeddings: Embedding[]; processedFiles: string[] } = {
 document.addEventListener("DOMContentLoaded", () => {
   const main: Main = document.querySelector("semantic-search");
   main.onFilesDropped = async (files: File[]) => {
-    data.embeddings = await createVectorsFromFiles(Array.from(files));
+    data.embeddings = await createVectorsFromFiles(files);
   };
   main.onSearch = (query: string) => searchSimilarDocs(query, data.embeddings);
 });

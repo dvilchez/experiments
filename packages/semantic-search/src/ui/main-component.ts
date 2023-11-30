@@ -1,5 +1,9 @@
-import { DroppedItems, FileDropComponent } from "./file-drop-component";
-import { ListOfFiles } from "./file-list-component";
+import {
+  DroppedItem,
+  DroppedItems,
+  FileDropComponent
+} from "./file-drop-component";
+import { ListOfFiles, TreeNode } from "./file-list-component";
 import { SearchResultList } from "./results-component";
 import { SearchBox } from "./search-box-component";
 
@@ -32,7 +36,6 @@ export class Main extends HTMLElement {
 
       .drop-area {
           background-color: #eee;
-          text-align: center;
           padding: 20px;
           border: 2px dashed #ccc;
           flex: 1;
@@ -78,9 +81,8 @@ export class Main extends HTMLElement {
       const searchBox: SearchBox = this.shadowRoot.querySelector("search-box");
 
       fileDropComponent.onFilesDropped = async (files: DroppedItems) => {
-        console.log("Files dropped", files, flatFiles(files));
-        await this._onFilesDropped(flatFiles(files));
-        fileList.files = flatFiles(files).map((file) => file.name);
+        this._onFilesDropped(files.reduce(flatFiles, []));
+        fileList.files = files.map(toTreeNode);
       };
 
       searchBox.onSearch = async (query: string) => {
@@ -101,18 +103,19 @@ export class Main extends HTMLElement {
   }
 }
 
-function flatFiles(items: DroppedItems): File[] {
-  const result: File[] = [];
-  if (!items) return result;
-
-  for (const item of items) {
-    if (item.isDirectory) {
-      result.push(...flatFiles(item.children));
-    } else {
-      result.push(item.file);
-    }
+function flatFiles(acc: File[], item: DroppedItem): File[] {
+  if (item.isDirectory) {
+    if (!item.children) return acc;
+    return [...acc, ...item.children.reduce(flatFiles, acc)];
   }
-  return result;
+  return [...acc, item.file];
+}
+
+function toTreeNode(item: DroppedItem): TreeNode {
+  if (item.isDirectory) {
+    return { name: item.name, children: item.children.map(toTreeNode) };
+  }
+  return { name: item.name };
 }
 
 window.customElements.define("file-drop", FileDropComponent);
