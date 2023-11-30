@@ -6,6 +6,8 @@ export declare class Main extends HTMLElement {
     }[]>;
     constructor();
     connectedCallback(): void;
+    showSpinner(): void;
+    hideSpinner(): void;
     set onFilesDropped(callback: (files: File[]) => Promise<void>);
     set onSearch(callback: (query: string) => Promise<{
         text: string;
