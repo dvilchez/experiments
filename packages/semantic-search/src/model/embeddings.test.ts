@@ -2,8 +2,8 @@ import { expect } from "@esm-bundle/chai";
 import { calculateSimilarities, embed } from "./embeddings";
 
 it("should return a list of embeddings", (done) => {
-  embed(chunk).then((embeddings) => {
-    expect(embeddings.vector).to.have.lengthOf(384);
+  embed([chunk]).then((embeddings) => {
+    expect(embeddings[0].vector).to.have.lengthOf(384);
     done();
   });
 });

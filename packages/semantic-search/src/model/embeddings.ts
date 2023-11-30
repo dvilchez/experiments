@@ -8,7 +8,7 @@ export type Embedding = {
   vector: Float32Array;
 };
 
-export const { embed, embedCollection, calculateSimilarities } = (function () {
+export const { embed, calculateSimilarities } = (function () {
   let extractor: Pipeline;
   async function getExtractor() {
     if (!extractor) {
@@ -20,18 +20,15 @@ export const { embed, embedCollection, calculateSimilarities } = (function () {
     return extractor;
   }
 
-  async function embed(chunk: string): Promise<Embedding> {
+  async function embed(chunk: string[]): Promise<Embedding[]> {
     const extractor = await getExtractor();
-    const embedding = await extractor(chunk, {
+    const embeddings = await extractor(chunk, {
       pooling: "mean",
       normalize: true
     });
-
-    return { text: chunk, vector: embedding.data };
-  }
-
-  async function embedCollection(chunk: string[]): Promise<Embedding[]> {
-    return Promise.all(chunk.map((chunk) => embed(chunk)));
+    return embeddings.tolist().map((vector: Float32Array, index: number) => {
+      return { text: chunk[index], vector };
+    });
   }
 
   function calculateSimilarities(
@@ -46,5 +43,5 @@ export const { embed, embedCollection, calculateSimilarities } = (function () {
     });
   }
 
-  return { embed, embedCollection, calculateSimilarities };
+  return { embed, calculateSimilarities };
 })();

@@ -1,13 +1,13 @@
 import { expect } from "@esm-bundle/chai";
 import { segmentByWords } from "./segmentation";
-import { embedCollection, Embedding } from "./embeddings";
+import { embed, Embedding } from "./embeddings";
 import { semanticSearch } from "./semantic-search";
 
 describe("semanticSearch", () => {
   let embeddings: Embedding[];
   beforeEach(async () => {
     const chunks = segmentByWords(text, 100);
-    embeddings = await embedCollection(chunks);
+    embeddings = await embed(chunks);
   });
 
   it("should return a list of documents related with the query text", async () => {
@@ -16,7 +16,7 @@ describe("semanticSearch", () => {
     const similarities = await semanticSearch(query, embeddings);
 
     const coincidence = similarities.sort((a, b) => b.score - a.score)[0];
-    expect(coincidence.score).to.eql(0.7744789415832468);
+    expect(coincidence.score).to.eql(0.7772451468725787);
     expect(coincidence.text).to.eql(highScoreChunk);
   });
 });

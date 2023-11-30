@@ -1,5 +1,5 @@
 import { segmentByWords } from "../model/segmentation";
-import { embedCollection } from "../model/embeddings";
+import { embed } from "../model/embeddings";
 
 export async function createVectorsFromFiles(files: File[]) {
   const chunks = await files.reduce(
@@ -11,5 +11,6 @@ export async function createVectorsFromFiles(files: File[]) {
     },
     Promise.resolve([])
   );
-  return await embedCollection(chunks);
+
+  return await embed(chunks);
 }
