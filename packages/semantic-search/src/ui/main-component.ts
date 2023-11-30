@@ -6,6 +6,7 @@ import {
 import { ListOfFiles, TreeNode } from "./file-list-component";
 import { SearchResultList } from "./results-component";
 import { SearchBox } from "./search-box-component";
+import { SpinnerElement } from "./spinner-component";
 
 export class Main extends HTMLElement {
   _onFilesDropped: (files: File[]) => Promise<void>;
@@ -81,8 +82,10 @@ export class Main extends HTMLElement {
       const searchBox: SearchBox = this.shadowRoot.querySelector("search-box");
 
       fileDropComponent.onFilesDropped = async (files: DroppedItems) => {
-        this._onFilesDropped(files.reduce(flatFiles, []));
         fileList.files = files.map(toTreeNode);
+        this.showSpinner();
+        await this._onFilesDropped(files.reduce(flatFiles, []));
+        this.hideSpinner();
       };
 
       searchBox.onSearch = async (query: string) => {
@@ -90,6 +93,19 @@ export class Main extends HTMLElement {
         resultsList.results = results;
       };
     }, 0);
+  }
+
+  showSpinner() {
+    const spinner = document.createElement("custom-spinner");
+    spinner.id = "spinner";
+    this.shadowRoot.appendChild(spinner);
+  }
+
+  hideSpinner() {
+    const spinner = this.shadowRoot.querySelector("#spinner");
+    if (spinner) {
+      this.shadowRoot.removeChild(spinner);
+    }
   }
 
   set onFilesDropped(callback: (files: File[]) => Promise<void>) {
@@ -122,3 +138,4 @@ window.customElements.define("file-drop", FileDropComponent);
 window.customElements.define("file-list", ListOfFiles);
 window.customElements.define("search-result-list", SearchResultList);
 window.customElements.define("search-box", SearchBox);
+window.customElements.define("custom-spinner", SpinnerElement);
