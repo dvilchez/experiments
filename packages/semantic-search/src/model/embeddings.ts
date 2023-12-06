@@ -14,6 +14,10 @@ export type Chunk = {
   content: string;
 };
 
+export function toChunk(content: string, path: string): Chunk {
+  return { content, path };
+}
+
 export const { embed, calculateSimilarities } = (function () {
   let extractor: Pipeline;
   async function getExtractor() {
