@@ -4,8 +4,14 @@ import { cosinSimilarity } from "./vector-search";
 const modelName = "Xenova/all-MiniLM-L6-v2";
 
 export type Embedding = {
+  path?: string;
   text: string;
   vector: Float32Array;
+};
+
+export type Chunk = {
+  path?: string;
+  content: string;
 };
 
 export const { embed, calculateSimilarities } = (function () {
@@ -20,24 +26,28 @@ export const { embed, calculateSimilarities } = (function () {
     return extractor;
   }
 
-  async function embed(chunk: string[]): Promise<Embedding[]> {
+  async function embed(chunks: Chunk[]): Promise<Embedding[]> {
     const extractor = await getExtractor();
-    const embeddings = await extractor(chunk, {
-      pooling: "mean",
-      normalize: true
-    });
+    const embeddings = await extractor(
+      chunks.map((chunk) => chunk.content),
+      {
+        pooling: "mean",
+        normalize: true
+      }
+    );
     return embeddings.tolist().map((vector: Float32Array, index: number) => {
-      return { text: chunk[index], vector };
+      return { path: chunks[index].path, text: chunks[index].content, vector };
     });
   }
 
   function calculateSimilarities(
     queryEmbeddings: Embedding,
     chunksEmbeddings: Embedding[]
-  ): { text: string; score: number }[] {
+  ): { text: string; path: string; score: number }[] {
     return chunksEmbeddings.map((chunkEmbeddings) => {
       return {
         text: chunkEmbeddings.text,
+        path: chunkEmbeddings.path,
         score: cosinSimilarity(queryEmbeddings.vector, chunkEmbeddings.vector)
       };
     });

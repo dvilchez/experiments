@@ -10,7 +10,9 @@ import { SpinnerElement } from "./spinner-component";
 
 export class Main extends HTMLElement {
   _onFilesDropped: (files: File[]) => Promise<void>;
-  _onSearch: (query: string) => Promise<{ text: string; score: number }[]>;
+  _onSearch: (
+    query: string
+  ) => Promise<{ text: string; path: string; score: number }[]>;
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -82,8 +84,8 @@ export class Main extends HTMLElement {
       const searchBox: SearchBox = this.shadowRoot.querySelector("search-box");
 
       fileDropComponent.onFilesDropped = async (files: DroppedItems) => {
-        fileList.files = files.map(toTreeNode);
         this.showSpinner();
+        fileList.files = files.map(toTreeNode);
         await this._onFilesDropped(files.reduce(flatFiles, []));
         this.hideSpinner();
       };
@@ -113,7 +115,9 @@ export class Main extends HTMLElement {
   }
 
   set onSearch(
-    callback: (query: string) => Promise<{ text: string; score: number }[]>
+    callback: (
+      query: string
+    ) => Promise<{ text: string; path: string; score: number }[]>
   ) {
     this._onSearch = callback;
   }

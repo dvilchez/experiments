@@ -6,7 +6,9 @@ import { semanticSearch } from "./semantic-search";
 describe("semanticSearch", () => {
   let embeddings: Embedding[];
   beforeEach(async () => {
-    const chunks = segmentByWords(text, 100);
+    const chunks = segmentByWords(text, 100).map((chunk) => ({
+      content: chunk
+    }));
     embeddings = await embed(chunks);
   });
 

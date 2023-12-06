@@ -1,5 +1,5 @@
 export class SearchResultList extends HTMLElement {
-  private _results: { text: string; score: number }[] = [];
+  private _results: { text: string; path: string; score: number }[] = [];
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -34,7 +34,7 @@ export class SearchResultList extends HTMLElement {
             (result) => `
           <div class="result-item">
             <div class="result-text">${result.text}</div>
-            <div class="result-score">Score: ${result.score}</div>
+            <div class="result-score">Score: ${result.score} - Path: ${result.path}</div>
           </div>
         `
           )
@@ -43,7 +43,7 @@ export class SearchResultList extends HTMLElement {
     `;
   }
 
-  set results(value: { text: string; score: number }[]) {
+  set results(value: { text: string; path: string; score: number }[]) {
     this._results = value;
     this.render();
   }
