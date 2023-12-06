@@ -27,20 +27,36 @@ export class SearchResultList extends HTMLElement {
           color: #666; 
           font-size: 12px; 
         }
+
+        .start-message {
+          text-align: center;
+        }
       </style>
       <div>
-        ${this._results
-          .map(
-            (result) => `
+        ${
+          this._results.length > 0
+            ? this._results
+                .map(
+                  (result) => `
           <div class="result-item">
             <div class="result-text">${result.text}</div>
             <div class="result-score">Score: ${result.score} - Path: ${result.path}</div>
           </div>
         `
-          )
-          .join("")}
+                )
+                .join("")
+            : `<div class="start-message"> Start your search </div>`
+        }
       </div>
     `;
+  }
+
+  hide() {
+    this.style.display = "none";
+  }
+
+  show() {
+    this.style.display = "block";
   }
 
   set results(value: { text: string; path: string; score: number }[]) {

@@ -3,7 +3,7 @@ import {
   DroppedItems,
   FileDropComponent
 } from "./file-drop-component";
-import { ListOfFiles, TreeNode } from "./file-list-component";
+import { ListOfFiles } from "./file-list-component";
 import { SearchResultList } from "./results-component";
 import { SearchBox } from "./search-box-component";
 import { SpinnerElement } from "./spinner-component";
@@ -38,39 +38,35 @@ export class Main extends HTMLElement {
       }
 
       .drop-area {
-          background-color: #eee;
           padding: 20px;
-          border: 2px dashed #ccc;
           flex: 1;
           display: flex;
           flex-direction: column;
       }
 
-      .drop-box {
-          flex: 1;
-      }
+      .files-message {
+        text-align: center;
+        font-size: 14px;
+        color: #666;
 
-      .file-list {
-          flex: 2;
-          align-self: flex-start;
       }
     </style>
     <div class="container">
         <!-- Search Component -->
         <search-box>
         </search-box>
+        <div style="height: 20px;" class="files-message">
+          The database contains <span id="total-files">0</span> files
+        </div>
 
         <!-- Document Lists and Drop Area -->
         <div class="content-area">
-              <search-result-list>
-              </search-result-list>
               <div class="drop-area">
+                <search-result-list>
+                </search-result-list>
                 <file-drop class="drop-box">
                     Drag and drop files/folders here
                 </file-drop>
-                <file-list class="file-list">
-
-                </file-list>
               </div>
         </div>
     </div>`;
@@ -78,15 +74,23 @@ export class Main extends HTMLElement {
     setTimeout(() => {
       const fileDropComponent: FileDropComponent =
         this.shadowRoot.querySelector("file-drop");
-      const fileList: ListOfFiles = this.shadowRoot.querySelector("file-list");
       const resultsList: SearchResultList =
         this.shadowRoot.querySelector("search-result-list");
       const searchBox: SearchBox = this.shadowRoot.querySelector("search-box");
+      const totalFiles: HTMLSpanElement =
+        this.shadowRoot.querySelector("#total-files");
 
+      resultsList.hide();
       fileDropComponent.onFilesDropped = async (files: DroppedItems) => {
         this.showSpinner();
-        fileList.files = files.map(toTreeNode);
-        await this._onFilesDropped(files.reduce(flatFiles, []));
+
+        const filesCollection = files.reduce(flatFiles, []);
+        fileDropComponent.hide();
+        resultsList.show();
+        totalFiles.textContent = filesCollection.length.toString();
+
+        await this._onFilesDropped(filesCollection);
+
         this.hideSpinner();
       };
 
@@ -129,13 +133,6 @@ function flatFiles(acc: File[], item: DroppedItem): File[] {
     return [...acc, ...item.children.reduce(flatFiles, acc)];
   }
   return [...acc, item.file];
-}
-
-function toTreeNode(item: DroppedItem): TreeNode {
-  if (item.isDirectory) {
-    return { name: item.name, children: item.children.map(toTreeNode) };
-  }
-  return { name: item.name };
 }
 
 window.customElements.define("file-drop", FileDropComponent);

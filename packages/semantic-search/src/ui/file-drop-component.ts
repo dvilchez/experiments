@@ -55,6 +55,10 @@ export class FileDropComponent extends HTMLElement {
     );
   }
 
+  hide() {
+    this.style.display = "none";
+  }
+
   set onFilesDropped(handler: (items: DroppedItems) => void) {
     this._onFilesDropped = handler;
   }
@@ -74,7 +78,6 @@ async function toDroppedItem(entry: FileSystemEntry): Promise<DroppedItem> {
   const children: DroppedItem[] = await getChildren(entry);
   const file = await getFile(entry);
 
-  console.log("entry", children);
   return {
     name: entry.name,
     path: entry.fullPath,
