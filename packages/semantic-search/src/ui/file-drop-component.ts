@@ -71,9 +71,10 @@ export type DroppedItem = {
 export type DroppedItems = DroppedItem[];
 
 async function toDroppedItem(entry: FileSystemEntry): Promise<DroppedItem> {
-  const children: DroppedItem[] = await getChilden(entry);
+  const children: DroppedItem[] = await getChildren(entry);
   const file = await getFile(entry);
 
+  console.log("entry", children);
   return {
     name: entry.name,
     path: entry.fullPath,
@@ -83,26 +84,34 @@ async function toDroppedItem(entry: FileSystemEntry): Promise<DroppedItem> {
   };
 }
 
-async function getChilden(
+async function getChildren(
   entry: FileSystemEntry
 ): Promise<DroppedItems | undefined> {
-  let children: DroppedItems;
-
   if (entry.isDirectory) {
-    children = [];
     const reader = (entry as FileSystemDirectoryEntry).createReader();
-    const entries: FileSystemEntry[] = await new Promise((resolve) =>
-      reader.readEntries(resolve)
-    );
-    for (let i = 0; i < entries.length; i++) {
-      const droppedItem = await toDroppedItem(entries[i]);
-      if (droppedItem) {
-        children.push(droppedItem);
-      }
+    return await getChildrenByChunks(reader, []);
+  }
+
+  return;
+}
+
+async function getChildrenByChunks(
+  reader: FileSystemDirectoryReader,
+  children: DroppedItems
+): Promise<DroppedItems> {
+  const entries: FileSystemEntry[] = await new Promise((resolve) =>
+    reader.readEntries(resolve)
+  );
+  if (entries.length === 0) return children;
+
+  for (let i = 0; i < entries.length; i++) {
+    const droppedItem = await toDroppedItem(entries[i]);
+    if (droppedItem) {
+      children.push(droppedItem);
     }
   }
 
-  return children;
+  return getChildrenByChunks(reader, children);
 }
 
 async function getFile(entry: FileSystemEntry): Promise<File | undefined> {
