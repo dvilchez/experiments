@@ -2,6 +2,7 @@ export declare class Main extends HTMLElement {
     _onFilesDropped: (files: File[]) => Promise<void>;
     _onSearch: (query: string) => Promise<{
         text: string;
+        path: string;
         score: number;
     }[]>;
     constructor();
@@ -11,6 +12,7 @@ export declare class Main extends HTMLElement {
     set onFilesDropped(callback: (files: File[]) => Promise<void>);
     set onSearch(callback: (query: string) => Promise<{
         text: string;
+        path: string;
         score: number;
     }[]>);
 }
