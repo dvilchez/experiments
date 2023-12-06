@@ -31,17 +31,36 @@ export const { embed, calculateSimilarities } = (function () {
   }
 
   async function embed(chunks: Chunk[]): Promise<Embedding[]> {
-    const extractor = await getExtractor();
-    const embeddings = await extractor(
-      chunks.map((chunk) => chunk.content),
-      {
-        pooling: "mean",
-        normalize: true
-      }
-    );
-    return embeddings.tolist().map((vector: Float32Array, index: number) => {
+    const embeddings = await calculateEmbeddingsInBatches(chunks, 100);
+
+    return embeddings.map((vector: Float32Array, index: number) => {
       return { path: chunks[index].path, text: chunks[index].content, vector };
     });
+  }
+
+  async function calculateEmbeddingsInBatches(
+    array: Chunk[],
+    batchSize: number
+  ) {
+    const extractor = await getExtractor();
+    const embeddings: Float32Array[] = [];
+    for (let i = 0; i < array.length; i += batchSize) {
+      const batch = array.slice(i, i + batchSize);
+
+      embeddings.push(
+        ...(
+          await extractor(
+            batch.map((chunk) => chunk.content),
+            {
+              pooling: "mean",
+              normalize: true
+            }
+          )
+        ).tolist()
+      );
+    }
+
+    return embeddings;
   }
 
   function calculateSimilarities(
