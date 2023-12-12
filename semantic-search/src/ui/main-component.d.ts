@@ -7,8 +7,7 @@ export declare class Main extends HTMLElement {
     }[]>;
     constructor();
     connectedCallback(): void;
-    showSpinner(): void;
-    hideSpinner(): void;
+    set onClear(callback: () => void);
     set onFilesDropped(callback: (files: File[]) => Promise<void>);
     set onSearch(callback: (query: string) => Promise<{
         text: string;
@@ -16,4 +15,6 @@ export declare class Main extends HTMLElement {
         score: number;
     }[]>);
     set numberOfFilesnDB(numberOfFilesnDB: number);
+    private showSpinner;
+    private hideSpinner;
 }
