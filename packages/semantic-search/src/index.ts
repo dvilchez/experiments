@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
   main.onClear = () => {
     resetDB();
-    main.numberOfFilesnDB = data.processedFiles.length;
+    main.numberOfFilesnDB = 0;
   };
   main.onSearch = (query: string) => searchSimilarDocs(query, data.embeddings);
   main.numberOfFilesnDB = data.processedFiles.length;
