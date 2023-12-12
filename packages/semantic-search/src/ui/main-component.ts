@@ -51,6 +51,7 @@ export class Main extends HTMLElement {
 
       }
     </style>
+    <H1>Semantic Search</H1>
     <div class="container">
         <!-- Search Component -->
         <search-box>
