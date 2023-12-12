@@ -15,4 +15,5 @@ export declare class Main extends HTMLElement {
         path: string;
         score: number;
     }[]>);
+    set numberOfFilesnDB(numberOfFilesnDB: number);
 }
