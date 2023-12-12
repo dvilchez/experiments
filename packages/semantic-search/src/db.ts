@@ -24,12 +24,6 @@ export function retrieveEmbeddings() {
   return db.embeddings.toArray();
 }
 
-export function resetDB() {
-  const db = new Embeddings();
-  db.delete();
-  localStorage.removeItem(processedFilesKey);
-}
-
 class Embeddings extends Dexie {
   embeddings!: Table<Embedding>;
 

@@ -102,12 +102,12 @@ export class Main extends HTMLElement {
     }, 0);
   }
 
-  set onClear(callback: () => void) {
+  set onClear(callback: () => Promise<void>) {
     const clearButton: HTMLAnchorElement =
       this.shadowRoot.querySelector("#clear");
     clearButton.addEventListener("click", async (event) => {
       event.preventDefault();
-      callback();
+      await callback();
     });
   }
 

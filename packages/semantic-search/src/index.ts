@@ -6,24 +6,39 @@ import {
   retrieveEmbeddings,
   storeEmbeddings,
   retrieveFiles,
-  storeFiles,
-  resetDB
+  storeFiles
 } from "./db";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const data: { embeddings: Embedding[]; processedFiles: string[] } = {
+async function restoreState(): Promise<{
+  embeddings: Embedding[];
+  processedFiles: string[];
+}> {
+  return {
     embeddings: (await retrieveEmbeddings()) ?? [],
     processedFiles: retrieveFiles() ?? []
   };
+}
+
+async function setState(embeddings: Embedding[], processedFiles: string[]) {
+  const data = { embeddings, processedFiles };
+  storeEmbeddings(data.embeddings);
+  storeFiles(data.processedFiles);
+
+  return data;
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  let data = await restoreState();
   const main: Main = document.querySelector("semantic-search");
   main.onFilesDropped = async (files: File[]) => {
-    data.embeddings = await createVectorsFromFiles(files);
-    storeEmbeddings(data.embeddings);
-    storeFiles(files.map((f) => f.name));
+    data = await setState(
+      await createVectorsFromFiles(files),
+      files.map((f) => f.name)
+    );
   };
-  main.onClear = () => {
-    resetDB();
-    main.numberOfFilesnDB = 0;
+  main.onClear = async () => {
+    data = await setState([], []);
+    main.numberOfFilesnDB = data.processedFiles.length;
   };
   main.onSearch = (query: string) => searchSimilarDocs(query, data.embeddings);
   main.numberOfFilesnDB = data.processedFiles.length;
