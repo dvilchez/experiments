@@ -7,7 +7,7 @@ export declare class Main extends HTMLElement {
     }[]>;
     constructor();
     connectedCallback(): void;
-    set onClear(callback: () => void);
+    set onClear(callback: () => Promise<void>);
     set onFilesDropped(callback: (files: File[]) => Promise<void>);
     set onSearch(callback: (query: string) => Promise<{
         text: string;
