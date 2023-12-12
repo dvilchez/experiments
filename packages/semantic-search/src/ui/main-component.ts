@@ -125,6 +125,23 @@ export class Main extends HTMLElement {
   ) {
     this._onSearch = callback;
   }
+
+  set numberOfFilesnDB(numberOfFilesnDB: number) {
+    const fileDropComponent: FileDropComponent =
+      this.shadowRoot.querySelector("file-drop");
+    const resultsList: SearchResultList =
+      this.shadowRoot.querySelector("search-result-list");
+    const totalFiles: HTMLSpanElement =
+      this.shadowRoot.querySelector("#total-files");
+    if (numberOfFilesnDB > 0) {
+      fileDropComponent.hide();
+      resultsList.show();
+    } else {
+      fileDropComponent.show();
+      resultsList.hide();
+    }
+    totalFiles.textContent = numberOfFilesnDB.toString();
+  }
 }
 
 function flatFiles(acc: File[], item: DroppedItem): File[] {

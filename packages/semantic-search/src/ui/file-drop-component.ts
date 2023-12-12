@@ -55,6 +55,10 @@ export class FileDropComponent extends HTMLElement {
     );
   }
 
+  show() {
+    this.style.display = "block";
+  }
+
   hide() {
     this.style.display = "none";
   }

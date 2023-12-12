@@ -28,6 +28,7 @@
     "webpack": "^5.89.0"
   },
   "dependencies": {
-    "@xenova/transformers": "^2.8.0"
+    "@xenova/transformers": "^2.8.0",
+    "dexie": "^3.2.4"
   }
 }
