@@ -6,22 +6,24 @@ import {
   retrieveEmbeddings,
   storeEmbeddings,
   retrieveFiles,
-  storeFiles
+  storeFiles,
+  resetDB
 } from "./db";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const data: { embeddings: Embedding[]; processedFiles: string[] } = {
     embeddings: (await retrieveEmbeddings()) ?? [],
-    processedFiles: retrieveFiles("processedFiles") ?? []
+    processedFiles: retrieveFiles() ?? []
   };
   const main: Main = document.querySelector("semantic-search");
   main.onFilesDropped = async (files: File[]) => {
     data.embeddings = await createVectorsFromFiles(files);
     storeEmbeddings(data.embeddings);
-    storeFiles(
-      "processedFiles",
-      files.map((f) => f.name)
-    );
+    storeFiles(files.map((f) => f.name));
+  };
+  main.onClear = () => {
+    resetDB();
+    main.numberOfFilesnDB = data.processedFiles.length;
   };
   main.onSearch = (query: string) => searchSimilarDocs(query, data.embeddings);
   main.numberOfFilesnDB = data.processedFiles.length;

@@ -57,7 +57,7 @@ export class Main extends HTMLElement {
         <search-box>
         </search-box>
         <div style="height: 20px;" class="files-message">
-          The database contains <span id="total-files">0</span> files
+          The database contains <span id="total-files">0</span> files <a href="#" id="clear">(clear)</a>
         </div>
 
         <!-- Document Lists and Drop Area -->
@@ -102,17 +102,13 @@ export class Main extends HTMLElement {
     }, 0);
   }
 
-  showSpinner() {
-    const spinner = document.createElement("custom-spinner");
-    spinner.id = "spinner";
-    this.shadowRoot.appendChild(spinner);
-  }
-
-  hideSpinner() {
-    const spinner = this.shadowRoot.querySelector("#spinner");
-    if (spinner) {
-      this.shadowRoot.removeChild(spinner);
-    }
+  set onClear(callback: () => void) {
+    const clearButton: HTMLAnchorElement =
+      this.shadowRoot.querySelector("#clear");
+    clearButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      callback();
+    });
   }
 
   set onFilesDropped(callback: (files: File[]) => Promise<void>) {
@@ -142,6 +138,19 @@ export class Main extends HTMLElement {
       resultsList.hide();
     }
     totalFiles.textContent = numberOfFilesnDB.toString();
+  }
+
+  private showSpinner() {
+    const spinner = document.createElement("custom-spinner");
+    spinner.id = "spinner";
+    this.shadowRoot.appendChild(spinner);
+  }
+
+  private hideSpinner() {
+    const spinner = this.shadowRoot.querySelector("#spinner");
+    if (spinner) {
+      this.shadowRoot.removeChild(spinner);
+    }
   }
 }
 
