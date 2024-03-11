@@ -30,6 +30,9 @@ async function setState(embeddings: Embedding[], processedFiles: string[]) {
 document.addEventListener("DOMContentLoaded", async () => {
   let data = await restoreState();
   const main: Main = document.querySelector("semantic-search");
+  if (!main) {
+    return;
+  }
   main.onFilesDropped = async (files: File[]) => {
     data = await setState(
       await createVectorsFromFiles(files),

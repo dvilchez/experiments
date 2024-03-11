@@ -1,0 +1,5 @@
+version: "SwiftWasm Swift version 5.9.1 (swift-5.9.1-RELEASE)"
+options: "3226fe14575115140f128a500f34de91"
+build_time: [1709926916, 102689000]
+inputs:
+  "/Users/dvilchez/wks/experiments/packages/enigma/Tests/enigmaTests/enigmaTests.swift": [1709926546, 705730583]

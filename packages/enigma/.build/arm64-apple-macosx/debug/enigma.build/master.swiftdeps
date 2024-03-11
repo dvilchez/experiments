@@ -1,0 +1,6 @@
+version: "SwiftWasm Swift version 5.9.1 (swift-5.9.1-RELEASE)"
+options: "f37394c1b9b885f41f842529832fe908"
+build_time: [1709926898, 280805000]
+inputs:
+  "/Users/dvilchez/wks/experiments/packages/enigma/Sources/enigma/Rotor.swift": [1709926546, 704418317]
+  "/Users/dvilchez/wks/experiments/packages/enigma/Sources/enigma/enigma.swift": [1709926546, 704789274]

@@ -1,0 +1,17 @@
+{
+  "": {
+    "swift-dependencies": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/master.swiftdeps"
+  },
+  "/Users/dvilchez/wks/experiments/packages/enigma/Sources/enigma/Rotor.swift": {
+    "dependencies": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/Rotor.d",
+    "object": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/Rotor.swift.o",
+    "swiftmodule": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/Rotor~partial.swiftmodule",
+    "swift-dependencies": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/Rotor.swiftdeps"
+  },
+  "/Users/dvilchez/wks/experiments/packages/enigma/Sources/enigma/enigma.swift": {
+    "dependencies": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/enigma.d",
+    "object": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/enigma.swift.o",
+    "swiftmodule": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/enigma~partial.swiftmodule",
+    "swift-dependencies": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigma.build/enigma.swiftdeps"
+  }
+}

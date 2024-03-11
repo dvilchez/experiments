@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigmaTests.build/master.swiftdeps"
+  },
+  "/Users/dvilchez/wks/experiments/packages/enigma/Tests/enigmaTests/enigmaTests.swift": {
+    "dependencies": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigmaTests.build/enigmaTests.d",
+    "object": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigmaTests.build/enigmaTests.swift.o",
+    "swiftmodule": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigmaTests.build/enigmaTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/dvilchez/wks/experiments/packages/enigma/.build/arm64-apple-macosx/debug/enigmaTests.build/enigmaTests.swiftdeps"
+  }
+}
