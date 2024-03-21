@@ -1,4 +1,4 @@
-export class ListOfFiles extends HTMLElement {
+export class File extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -11,16 +11,11 @@ export class ListOfFiles extends HTMLElement {
 
   // Render the list
   render() {
+    const fileName = this.getAttribute("fileName");
     this.shadowRoot.innerHTML = `
-      <style>
-        ul {
-          list-style-type: none;
-          padding-left: 20px;
-        }
-      </style>
-      <slot></slot>
+    	<li>${fileName}</li>
     `;
   }
 }
 
-window.customElements.define("file-list", ListOfFiles);
+window.customElements.define("file-item", File);

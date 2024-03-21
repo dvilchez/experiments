@@ -9,6 +9,9 @@ importers:
       semantic-search:
         specifier: workspace:^
         version: link:../semantic-search
+      semantic-search-langchain:
+        specifier: workspace:^
+        version: link:../semantic-search-langchain
     devDependencies:
       '@types/jest':
         specifier: ^29.5.7
@@ -48,6 +51,46 @@ importers:
         version: 4.15.1(webpack-cli@5.1.4)(webpack@5.89.0)
 
   packages/semantic-search:
+    dependencies:
+      '@xenova/transformers':
+        specifier: ^2.8.0
+        version: 2.8.0
+      dexie:
+        specifier: ^3.2.4
+        version: 3.2.4
+    devDependencies:
+      '@esm-bundle/chai':
+        specifier: 4.3.4-fix.0
+        version: 4.3.4-fix.0
+      '@types/mocha':
+        specifier: ^10.0.6
+        version: 10.0.6
+      '@typescript-eslint/parser':
+        specifier: ^6.9.1
+        version: 6.9.1(eslint@8.52.0)(typescript@5.2.2)
+      '@web/dev-server':
+        specifier: ^0.4.1
+        version: 0.4.1
+      '@web/test-runner':
+        specifier: ^0.18.0
+        version: 0.18.0(typescript@5.2.2)
+      eslint:
+        specifier: ^8.52.0
+        version: 8.52.0
+      memfs:
+        specifier: ^4.6.0
+        version: 4.6.0(quill-delta@5.1.0)(rxjs@7.8.1)(tslib@2.6.2)
+      ts-loader:
+        specifier: ^9.5.0
+        version: 9.5.0(typescript@5.2.2)(webpack@5.89.0)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      webpack:
+        specifier: ^5.89.0
+        version: 5.89.0(webpack-cli@5.1.4)
+
+  packages/semantic-search-langchain:
     dependencies:
       '@xenova/transformers':
         specifier: ^2.8.0
@@ -4531,7 +4574,7 @@ packages:
       escape-html: 1.0.3
       fresh: 0.5.2
       http-assert: 1.5.0
-      http-errors: 1.6.3
+      http-errors: 1.8.1
       is-generator-function: 1.0.10
       koa-compose: 4.1.0
       koa-convert: 2.0.0

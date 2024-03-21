@@ -1,5 +1,4 @@
 export class FileDropComponent extends HTMLElement {
-  private _onFilesDropped: (items: DroppedItems) => void;
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -31,42 +30,36 @@ export class FileDropComponent extends HTMLElement {
       (event) => {
         event.preventDefault();
       },
-      false
+      false,
     );
 
     dropArea.addEventListener(
       "drop",
       async (event: DragEvent) => {
         event.preventDefault();
-        if (this._onFilesDropped) {
-          const items = event.dataTransfer.items;
-          const entries: FileSystemEntry[] = [];
-          for (const item of items) {
-            if (item.kind !== "file") continue;
 
-            const entry = item.webkitGetAsEntry();
-            if (entry) entries.push(entry);
-          }
+        const items = event.dataTransfer.items;
+        const entries: FileSystemEntry[] = [];
+        for (const item of items) {
+          if (item.kind !== "file") continue;
 
-          this._onFilesDropped(await Promise.all(entries.map(toDroppedItem)));
+          const entry = item.webkitGetAsEntry();
+          if (entry) entries.push(entry);
         }
+
+        const files = await Promise.all(entries.map(toDroppedItem));
+        this.dispatchEvent(
+          new CustomEvent("filesDropped", {
+            detail: files,
+          }),
+        );
       },
-      false
+      false,
     );
   }
-
-  show() {
-    this.style.display = "block";
-  }
-
-  hide() {
-    this.style.display = "none";
-  }
-
-  set onFilesDropped(handler: (items: DroppedItems) => void) {
-    this._onFilesDropped = handler;
-  }
 }
+
+window.customElements.define("file-drop", FileDropComponent);
 
 export type DroppedItem = {
   name: string;
@@ -87,12 +80,12 @@ async function toDroppedItem(entry: FileSystemEntry): Promise<DroppedItem> {
     path: entry.fullPath,
     file,
     children,
-    isDirectory: entry.isDirectory
+    isDirectory: entry.isDirectory,
   };
 }
 
 async function getChildren(
-  entry: FileSystemEntry
+  entry: FileSystemEntry,
 ): Promise<DroppedItems | undefined> {
   if (entry.isDirectory) {
     const reader = (entry as FileSystemDirectoryEntry).createReader();
@@ -104,10 +97,10 @@ async function getChildren(
 
 async function getChildrenByChunks(
   reader: FileSystemDirectoryReader,
-  children: DroppedItems
+  children: DroppedItems,
 ): Promise<DroppedItems> {
   const entries: FileSystemEntry[] = await new Promise((resolve) =>
-    reader.readEntries(resolve)
+    reader.readEntries(resolve),
   );
   if (entries.length === 0) return children;
 

@@ -29,6 +29,7 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
-    "semantic-search": "workspace:^"
+    "semantic-search": "workspace:^",
+    "semantic-search-langchain": "workspace:^"
   }
 }

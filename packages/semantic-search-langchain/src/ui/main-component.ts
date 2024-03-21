@@ -1,18 +1,10 @@
-import {
-  DroppedItem,
-  DroppedItems,
-  FileDropComponent
-} from "./file-drop-component";
-import { ListOfFiles } from "./file-list-component";
-import { SearchResultList } from "./results-component";
-import { SearchBox } from "./search-box-component";
-import { SpinnerElement } from "./spinner-component";
+import "./file-drop-component";
+import "./file-list-component";
+import "./file-component";
+//import { createVectorsFromFiles } from "../behaviors/create-vectors-from-docs";
+import { DroppedItem, DroppedItems } from "./file-drop-component";
 
 export class Main extends HTMLElement {
-  _onFilesDropped: (files: File[]) => Promise<void>;
-  _onSearch: (
-    query: string
-  ) => Promise<{ text: string; path: string; score: number }[]>;
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -66,93 +58,31 @@ export class Main extends HTMLElement {
                 <search-result-list>
                 </search-result-list>
                 <file-drop class="drop-box">
-                    Drag and drop files/folders here
                 </file-drop>
+                <file-list class="file-list">
+                </file-list>
               </div>
         </div>
     </div>`;
 
-    setTimeout(() => {
-      const fileDropComponent: FileDropComponent =
-        this.shadowRoot.querySelector("file-drop");
-      const resultsList: SearchResultList =
-        this.shadowRoot.querySelector("search-result-list");
-      const searchBox: SearchBox = this.shadowRoot.querySelector("search-box");
-      const totalFiles: HTMLSpanElement =
-        this.shadowRoot.querySelector("#total-files");
-
-      resultsList.hide();
-      fileDropComponent.onFilesDropped = async (files: DroppedItems) => {
-        this.showSpinner();
-
+    this.shadowRoot
+      .querySelector(".drop-box")
+      ?.addEventListener("filesDropped", async (e: CustomEvent) => {
+        const files = e.detail as DroppedItems;
         const filesCollection = files.reduce(flatFiles, []);
-        fileDropComponent.hide();
-        resultsList.show();
-        totalFiles.textContent = filesCollection.length.toString();
 
-        await this._onFilesDropped(filesCollection);
-
-        this.hideSpinner();
-      };
-
-      searchBox.onSearch = async (query: string) => {
-        const results = await this._onSearch(query);
-        resultsList.results = results;
-      };
-    }, 0);
-  }
-
-  set onClear(callback: () => Promise<void>) {
-    const clearButton: HTMLAnchorElement =
-      this.shadowRoot.querySelector("#clear");
-    clearButton.addEventListener("click", async (event) => {
-      event.preventDefault();
-      await callback();
-    });
-  }
-
-  set onFilesDropped(callback: (files: File[]) => Promise<void>) {
-    this._onFilesDropped = callback;
-  }
-
-  set onSearch(
-    callback: (
-      query: string
-    ) => Promise<{ text: string; path: string; score: number }[]>
-  ) {
-    this._onSearch = callback;
-  }
-
-  set numberOfFilesnDB(numberOfFilesnDB: number) {
-    const fileDropComponent: FileDropComponent =
-      this.shadowRoot.querySelector("file-drop");
-    const resultsList: SearchResultList =
-      this.shadowRoot.querySelector("search-result-list");
-    const totalFiles: HTMLSpanElement =
-      this.shadowRoot.querySelector("#total-files");
-    if (numberOfFilesnDB > 0) {
-      fileDropComponent.hide();
-      resultsList.show();
-    } else {
-      fileDropComponent.show();
-      resultsList.hide();
-    }
-    totalFiles.textContent = numberOfFilesnDB.toString();
-  }
-
-  private showSpinner() {
-    const spinner = document.createElement("custom-spinner");
-    spinner.id = "spinner";
-    this.shadowRoot.appendChild(spinner);
-  }
-
-  private hideSpinner() {
-    const spinner = this.shadowRoot.querySelector("#spinner");
-    if (spinner) {
-      this.shadowRoot.removeChild(spinner);
-    }
+        const fileList = this.shadowRoot.querySelector(".file-list");
+        filesCollection.forEach((file) => {
+          const fileComponent = document.createElement("file-item");
+          fileComponent.setAttribute("fileName", file.name);
+          fileList?.appendChild(fileComponent);
+        });
+        //vectors = await createVectorsFromFiles(filesCollection);
+      });
   }
 }
+
+window.customElements.define("semantic-search-langchain", Main);
 
 function flatFiles(acc: File[], item: DroppedItem): File[] {
   if (item.isDirectory) {
@@ -161,9 +91,3 @@ function flatFiles(acc: File[], item: DroppedItem): File[] {
   }
   return [...acc, item.file];
 }
-
-window.customElements.define("file-drop", FileDropComponent);
-window.customElements.define("file-list", ListOfFiles);
-window.customElements.define("search-result-list", SearchResultList);
-window.customElements.define("search-box", SearchBox);
-window.customElements.define("custom-spinner", SpinnerElement);

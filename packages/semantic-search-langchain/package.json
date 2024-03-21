@@ -1,5 +1,5 @@
 {
-  "name": "semantic-search",
+  "name": "semantic-search-langchain",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
